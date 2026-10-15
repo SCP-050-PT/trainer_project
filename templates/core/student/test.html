@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Тест: {{ exam_run.test.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white py-3 px-4 rounded-top-4">
+            <h5 class="mb-0 fw-bold">{{ exam_run.test.title }}</h5>
+            <small class="opacity-75">{{ exam_run.test.subject.name }}</small>
+        </div>
+
+        <div class="card-body p-4">
+            <form method="post">
+                {% csrf_token %}
+
+                {% for q in questions %}
+                <div class="mb-5 pb-4 border-bottom last-border-none">
+                    <div class="d-flex gap-3 mb-3">
+                        <span class="badge bg-secondary rounded-pill flex-shrink-0 mt-1">№ {{ forloop.counter }}</span>
+                        <div class="flex-grow-1">
+                            <p class="fs-5 fw-semibold text-dark mb-2">{{ q.text|safe }}</p>
+
+                            {% if q.image %}
+                            <img src="{{ q.image.url }}" alt="Иллюстрация" class="img-fluid rounded border mb-3"
+                                style="max-height: 300px;">
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Блок вариантов ответа -->
+                    <div class="ms-4">
+                        {% if q.question_type == 'single_choice' or q.question_type == 'multiple_choice' %}
+                        {% for opt in q.options.all %}
+                        <div class="form-check mb-2">
+                            <input class="form-check-input"
+                                type="{% if q.question_type == 'single_choice' %}radio{% else %}checkbox{% endif %}"
+                                name="answer_{{ q.id }}" value="{{ opt.id }}" id="opt_{{ opt.id }}">
+                            <label class="form-check-label" for="opt_{{ opt.id }}">
+                                {{ opt.text }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                        {% elif q.question_type == 'text_input' or q.question_type == 'number_input' %}
+                        <input type="{% if q.question_type == 'number_input' %}number{% else %}text{% endif %}"
+                            name="answer_{{ q.id }}" class="form-control form-control-lg"
+                            placeholder="Введите ответ...">
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted">Вопросы не найдены.</p>
+                {% endfor %}
+
+                <div class="mt-4 pt-3 border-top">
+                    <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm">
+                        Завершить тест и отправить ответы
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

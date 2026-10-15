@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Личный кабинет ученика{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Приветствие -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <h2 class="fw-bold text-dark">Привет, {{ student.full_name }}!</h2>
+            <p class="text-muted mb-0">Ваш класс: <strong>{{ student.school_class.display_name }}</strong></p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'student_logout' %}" class="btn btn-outline-secondary btn-sm">Выйти</a>
+        </div>
+    </div>
+
+    <!-- Список тестов -->
+    {% if exams %}
+    <h5 class="mb-3 fw-bold">Доступные задания:</h5>
+    <div class="list-group shadow-sm rounded-3 overflow-hidden">
+        {% for exam in exams %}
+        <a href="{% url 'take_test' exam.id %}"
+            class="list-group-item list-group-item-action p-4 border-0 border-bottom hover-bg-light transition-all">
+            <div class="d-flex w-100 justify-content-between align-items-start">
+                <div>
+                    <h6 class="mb-1 fw-bold fs-5">{{ exam.test.title }}</h6>
+                    <small class="text-muted d-block mb-1">Предмет: {{ exam.test.subject.name }}</small>
+
+                    {% if exam.deadline %}
+                    <span class="badge bg-warning text-dark me-2">Дедлайн: {{ exam.deadline|date:"d.m.Y H:i" }}</span>
+                    {% endif %}
+
+                    <span class="badge bg-info text-dark">{{ exam.test.questions.count }} вопросов</span>
+                    {% if exam.test.time_limit_minutes > 0 %}
+                    <span class="badge bg-primary">{{ exam.test.time_limit_minutes }} мин.</span>
+                    {% endif %}
+                </div>
+                <div class="ms-3">
+                    <i class="bi bi-arrow-right-circle-fill fs-2 text-primary"></i>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- История результатов (если есть пройденные) -->
+    {% else %}
+    <div class="alert alert-info text-center py-5 rounded-3 border-0 shadow-sm">
+        <i class="bi bi-check-circle-fill fs-1 text-success mb-3 d-block"></i>
+        <h5 class="fw-bold">У вас пока нет активных заданий</h5>
+        <p class="text-muted mb-0">Проверьте позже или обратитесь к учителю.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

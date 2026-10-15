@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Результат теста{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <!-- Карточка итогового балла -->
+            <div class="card shadow-lg border-0 rounded-4 mb-4 overflow-hidden text-center p-5 bg-white">
+
+                <h3 class="fw-bold mb-3 text-dark">Тест завершен!</h3>
+
+                <div
+                    class="display-1 fw-bold {% if attempt.percentage >= 50 %}text-success{% else %}text-danger{% endif %} mb-2">
+                    {{ attempt.score }} / {{ attempt.max_score }}
+                </div>
+
+                <p class="lead mb-4">{{ attempt.percentage }}%</p>
+
+                <!-- Звездочки (Простая логика) -->
+                <div class="fs-2 mb-4 d-flex justify-content-center gap-1">
+                    {% for i in "12345"|make_list %}
+                    {% if forloop.counter <= attempt.stars %} <i class="bi bi-star-fill text-warning"></i>
+                        {% else %}
+                        <i class="bi bi-star text-secondary opacity-25"></i>
+                        {% endif %}
+                        {% endfor %}
+                </div>
+
+                <a href="{% url 'student_dashboard' %}" class="btn btn-primary btn-lg px-5 mt-3">Вернуться в кабинет</a>
+            </div>
+
+            <!-- Детализация ошибок -->
+            {% if answers %}
+            <details class="card border-0 shadow-sm rounded-3 mb-4" open>
+                <summary class="btn btn-light w-100 text-start text-decoration-none py-3 px-4 fw-medium border-bottom">
+                    Разбор ответов ({{ answers|length }} шт.)
+                </summary>
+                <div class="card-body">
+                    {% for ans in answers %}
+                    <div class="mb-4 pb-3 border-bottom last-border-none">
+                        <p class="fw-bold mb-2 text-dark">
+                            Q{{ forloop.counter }}: {{ ans.question.text|safe }}
+                        </p>
+
+                        <div class="ps-3 small">
+                            {% if ans.is_correct %}
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                <i class="bi bi-check-circle-fill me-1"></i> Верно
+                            </span>
+                            {% else %}
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle mb-2 d-block">
+                                <i class="bi bi-x-circle-fill me-1"></i> Неверно
+                            </span>
+
+                            <!-- Показываем правильный ответ -->
+                            <div class="mt-2 p-2 bg-light rounded border">
+                                <strong>Правильный ответ:</strong>
+
+                                {% if ans.selected_option %}
+                                <!-- Если был выбор варианта -->
+                                {{ ans.selected_option.text }}
+                                {% elif ans.given_value %}
+                                <!-- Если вводили текст -->
+                                "{{ ans.given_value }}"
+                                {% else %}
+                                <!-- Ищем правильный вариант в базе вопроса -->
+                                {% for opt in ans.question.options.all %}
+                                {% if opt.is_correct %}
+                                {{ opt.text }}
+                                {% endif %}
+                                {% endfor %}
+
+                                {% if not ans.question.options.exists %}
+                                <!-- Для текстовых вопросов -->
+                                {{ ans.question.correct_answer.value }}
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">Нет данных об ответах.</p>
+                    {% endfor %}
+                </div>
+            </details>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

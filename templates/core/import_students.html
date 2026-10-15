@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Импорт списка учеников{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <!-- Заголовок -->
+            <div class="text-center mb-4">
+                <i class="bi bi-file-earmark-excel fs-1 text-success"></i>
+                <h2 class="fw-bold mt-3">Загрузка списка класса</h2>
+                <p class="text-muted">Поддерживаются форматы .xlsx (Excel) и .csv</p>
+            </div>
+
+            <!-- Сообщение об успехе/ошибке выводится через base.html -->
+
+            <form method="post" enctype="multipart/form-data" class="card shadow-sm border-0 rounded-4 p-4 bg-white">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label for="school_class" class="form-label fw-semibold">1. Выберите класс</label>
+                    <select name="school_class" id="school_class" class="form-select form-select-lg" required>
+                        <option value="" disabled selected>-- Выберите класс из списка --</option>
+                        {% for c in classes %}
+                        <option value="{{ c.id }}">{{ c.display_name }}</option>
+                        {% empty %}
+                        <option disabled>Классы не найдены. Сначала добавьте их в админке.</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="file" class="form-label fw-semibold">2. Прикрепите файл со списком ФИО</label>
+                    <input type="file" name="file" id="file" class="form-control form-control-lg"
+                        accept=".csv,.xlsx,.xls" required>
+                    <div class="form-text">
+                        Файл должен содержать колонку с ФИО учеников. Система автоматически сгенерирует уникальные
+                        5-значные PIN-коды каждому.
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-5 shadow-sm">
+                    <i class="bi bi-cloud-upload me-2"></i> Импортировать и раздать PIN
+                </button>
+            </form>
+
+            <!-- Инструкция / Пример формата -->
+            <div class="mt-4 p-3 bg-light rounded-3 small text-secondary">
+                <strong>Пример структуры файла (.csv):</strong><br>
+                <code>ФИО<br>Иванов Иван Иванович<br>Петрова Мария Сергеевна</code>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

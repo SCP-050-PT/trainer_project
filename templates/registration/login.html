@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Вход для сотрудника{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-sm border-0 rounded-3 p-4">
+            <h3 class="text-center mb-4 fw-bold text-primary">Школьный Портал</h3>
+            <p class="text-center text-muted small mb-4">Вход для учителей и администраторов</p>
+
+            {% if form.errors %}
+            <div class="alert alert-danger py-2 px-3 small">
+                Неверный логин или пароль. Попробуйте еще раз.
+            </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">Логин</label>
+                    {{ form.username }} <!-- Сюда подставится поле -->
+                </div>
+
+                <div class="mb-4">
+                    <label for="id_password" class="form-label">Пароль</label>
+                    {{ form.password }}
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Войти в систему</button>
+            </form>
+
+            <hr class="my-4">
+            <div class="text-center">
+                <a href="/" class="text-decoration-none small text-secondary">&larr; Вернуться к входу учеников</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
