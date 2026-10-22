@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Школьный Тренажёр{% endblock %}
+
+{% block guest_content %}
+<div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+    <div class="card-body p-5 text-center">
+        <h1 class="display-5 fw-bold text-primary mb-3">ГБОУ Школа № 777</h1>
+        <p class="lead text-muted mb-5">Мультипредметный тренажёр</p>
+
+        <div class="d-grid gap-3">
+            <a href="{% url 'student_login' %}" class="btn btn-success btn-lg py-3 fw-bold">
+                <i class="bi bi-person-badge me-2"></i> Вход для ученика (PIN)
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-primary btn-lg py-3 fw-bold">
+                <i class="bi bi-shield-lock me-2"></i> Вход для учителя / админа
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

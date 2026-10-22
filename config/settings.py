@@ -56,6 +56,12 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+STATIC_URL = 'static/'
+
+# ЕСЛИ ПАПКА STATIC ЛЕЖИТ В КОРНЕ ПРОЕКТА (рядом с manage.py):
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 # База данных PostgreSQL
 # DATABASES = {
 #    "default": {

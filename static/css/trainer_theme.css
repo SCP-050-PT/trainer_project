@@ -1,0 +1,316 @@
+/* =========================================
+   ТРЕМАЖЁР ШКОЛЫ №777 - ТЕМА УЧЕНИКА
+   Colors based on Platform Teachers & Logo
+========================================= */
+
+:root {
+    /* Primary Brand Color (Indigo/Blue from Teachers Platform) */
+    --primary-color: #4F46E5; 
+    --primary-hover: #4338CA;
+    
+    /* Success / Action Color (Green from Logo/Math Site) */
+    --success-color: #10B981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    
+    /* Danger / Error Color (Red for Timer/Wrong Answers) */
+    --danger-color: #EF4444;
+    --danger-bg: rgba(239, 68, 68, 0.1);
+    
+    /* Warning (Orange for Medium scores) */
+    --warning-color: #F59E0B;
+    
+    /* Backgrounds & Text */
+    --bg-body: #F3F4F6;       /* Light gray background */
+    --bg-card: #FFFFFF;       /* White cards */
+    --text-main: #1F2937;     /* Dark gray text */
+    --text-muted: #6B7280;    /* Gray hints */
+    --border-color: #E5E7EB;  /* Light borders */
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+body.trainer-page {
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.5;
+}
+
+/* --- Header for Student Test --- */
+.student-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.header-info h5 { margin: 0; font-weight: 700; color: var(--primary-color); }
+.header-info small { color: var(--text-muted); font-size: 0.85rem; }
+
+.timer-badge {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-main);
+    background: var(--bg-body);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer-badge.warning {
+    color: var(--danger-color);
+    animation: pulse-red 1s infinite;
+}
+
+@keyframes pulse-red {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* --- Question Cards --- */
+.question-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.q-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border-left: 5px solid transparent; /* Will be set by JS or class */
+    transition: transform 0.2s ease;
+}
+
+.q-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.q-meta {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.q-number {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+.q-type-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: #EEF2FF;
+    color: var(--primary-color);
+}
+
+.q-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+    color: var(--text-main);
+}
+
+/* --- Interactive Options (The "Tiles") --- */
+.options-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.option-tile {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+    user-select: none;
+}
+
+.option-tile:hover {
+    border-color: var(--primary-color);
+    background: #FAFAFE;
+}
+
+.option-tile.selected {
+    border-color: var(--primary-color);
+    background: #EEF2FF; /* Very light indigo */
+    box-shadow: inset 0 0 0 1px var(--primary-color);
+}
+
+.option-letter {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg-body);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.option-tile.selected .option-letter {
+    background: var(--primary-color);
+    color: white;
+}
+
+.option-text {
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+/* Input fields for short answers */
+.short-answer-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.short-answer-input:focus {
+    border-color: var(--primary-color);
+}
+
+/* --- Submit Button --- */
+.submit-area {
+    text-align: center;
+    margin-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+.btn-submit-test {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+    transition: all 0.2s;
+}
+
+.btn-submit-test:hover {
+    background: var(--primary-hover);
+    transform: scale(1.02);
+}
+
+/* --- Results Screen Styles --- */
+.result-hero {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 2rem;
+}
+
+.grade-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin: 0 auto 1.5rem;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+/* Grade colors */
+.grade-5 { background: linear-gradient(135deg, #10B981, #059669); } /* Green */
+.grade-4 { background: linear-gradient(135deg, #4F46E5, #4338CA); } /* Indigo */
+.grade-3 { background: linear-gradient(135deg, #F59E0B, #D97706); } /* Orange */
+.grade-2 { background: linear-gradient(135deg, #EF4444, #DC2626); } /* Red */
+
+.score-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 12px;
+    background: var(--bg-body);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+    border-radius: 6px;
+    transition: width 1s ease-out;
+}
+
+/* Review List */
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.review-item {
+    background: white;
+    border-radius: 10px;
+    padding: 1.2rem;
+    border-left: 4px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.review-item.correct { border-left-color: var(--success-color); }
+.review-item.incorrect { border-left-color: var(--danger-color); }
+
+.review-q { font-weight: 600; margin-bottom: 0.5rem; }
+.review-ans-row { font-size: 0.9rem; color: var(--text-muted); display: flex; gap: 1rem; flex-wrap: wrap;}
+.badge-correct { color: var(--success-color); font-weight: 600; }
+.badge-wrong { color: var(--danger-color); font-weight: 600; text-decoration: line-through; }

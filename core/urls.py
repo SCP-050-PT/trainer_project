@@ -3,18 +3,19 @@ from . import views
 
 urlpatterns = [
     # --- ДЛЯ УЧЕНИКА ---
-    # Вход ученика обрабатывается в config/urls.py как главная страница ('')
-    # Кабинет ученика (список тестов)
+    # 1. Вход ученика (выбор класса + PIN) — ЭТОГО НЕ ХВАТАЛО!
+    path("student-login/", views.student_login_view, name="student_login"),
+    # 2. Кабинет ученика (список тестов)
     path("student-dashboard/", views.student_dashboard, name="student_dashboard"),
-    # Прохождение конкретного теста
+    # 3. Прохождение конкретного теста
     path("take-test/<int:exam_run_id>/", views.take_test, name="take_test"),
-    # Результат теста (Вот эта функция нужна! Мы добавим её ниже)
+    # 4. Результат теста
     path("result/<int:attempt_id>/", views.student_result, name="student_result"),
-    # Выход ученика
+    # 5. Выход ученика
     path("student-logout/", views.student_logout, name="student_logout"),
     # --- ДЛЯ УЧИТЕЛЯ / АДМИНА ---
-    # Дашборд сотрудника
+    # 6. Дашборд сотрудника
     path("dashboard/", views.dashboard_view, name="dashboard"),
-    # Импорт списков учеников
+    # 7. Импорт списков учеников
     path("import-students/", views.import_students_view, name="import_students"),
 ]

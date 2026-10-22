@@ -1,39 +1,34 @@
 {% extends "base.html" %}
 {% block title %}Вход для сотрудника{% endblock %}
 
-{% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-5 col-lg-4">
-        <div class="card shadow-sm border-0 rounded-3 p-4">
-            <h3 class="text-center mb-4 fw-bold text-primary">Школьный Портал</h3>
-            <p class="text-center text-muted small mb-4">Вход для учителей и администраторов</p>
+{% block guest_content %}
+<div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+    <div class="card-body p-5 text-center">
+        <h2 class="fw-bold text-primary mb-4">Вход для сотрудников</h2>
 
-            {% if form.errors %}
-            <div class="alert alert-danger py-2 px-3 small">
-                Неверный логин или пароль. Попробуйте еще раз.
+        {% if form.errors %}
+        <div class="alert alert-danger mb-4">Неверный логин или пароль.</div>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <div class="mb-3 text-start">
+                <label for="id_username" class="form-label fw-semibold">Логин</label>
+                {{ form.username }}
             </div>
-            {% endif %}
 
-            <form method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-
-                <div class="mb-3">
-                    <label for="id_username" class="form-label">Логин</label>
-                    {{ form.username }} <!-- Сюда подставится поле -->
-                </div>
-
-                <div class="mb-4">
-                    <label for="id_password" class="form-label">Пароль</label>
-                    {{ form.password }}
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Войти в систему</button>
-            </form>
-
-            <hr class="my-4">
-            <div class="text-center">
-                <a href="/" class="text-decoration-none small text-secondary">&larr; Вернуться к входу учеников</a>
+            <div class="mb-4 text-start">
+                <label for="id_password" class="form-label fw-semibold">Пароль</label>
+                {{ form.password }}
             </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-5">Войти</button>
+        </form>
+
+        <hr class="my-4">
+        <div class="text-center">
+            <a href="/" class="text-decoration-none small text-secondary">&larr; Вернуться к входу учеников</a>
         </div>
     </div>
 </div>

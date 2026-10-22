@@ -1,18 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Личный кабинет ученика{% endblock %}
 
-{% block content %}
+{% block staff_content %}
 <div class="container mt-4">
-    <!-- Приветствие -->
-    <div class="row mb-4 align-items-center">
-        <div class="col-md-8">
-            <h2 class="fw-bold text-dark">Привет, {{ student.full_name }}!</h2>
-            <p class="text-muted mb-0">Ваш класс: <strong>{{ student.school_class.display_name }}</strong></p>
-        </div>
-        <div class="col-md-4 text-end">
-            <a href="{% url 'student_logout' %}" class="btn btn-outline-secondary btn-sm">Выйти</a>
-        </div>
-    </div>
 
     <!-- Список тестов -->
     {% if exams %}
@@ -52,4 +42,4 @@
     </div>
     {% endif %}
 </div>
-{% endblock %}
+{% endblock staff_content %}

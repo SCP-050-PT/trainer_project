@@ -1,63 +1,131 @@
+<!-- eslint-disable no-undef -->
+<!-- jshint ignore:start -->
 {% extends "base.html" %}
-{% block title %}Тест: {{ exam_run.test.title }}{% endblock %}
+{% block title %}Прохождение теста{% endblock %}
 
 {% block content %}
-<div class="container my-4">
-    <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-header bg-primary text-white py-3 px-4 rounded-top-4">
-            <h5 class="mb-0 fw-bold">{{ exam_run.test.title }}</h5>
-            <small class="opacity-75">{{ exam_run.test.subject.name }}</small>
+<div class="trainer-page">
+    <!-- Sticky Header with Timer -->
+    <header class="student-header">
+        <div class="header-info">
+            <h5>{{ exam_run.test.title }}</h5>
+            <small>{{ exam_run.test.subject.name }} • {{ student.school_class.display_name }}</small>
         </div>
 
-        <div class="card-body p-4">
-            <form method="post">
-                {% csrf_token %}
+        {% if exam_run.test.time_limit_minutes > 0 %}
+        <div class="timer-badge" id="timer-display">
+            {{ exam_run.test.time_limit_minutes }}:00
+        </div>
+        {% endif %}
+    </header>
 
-                {% for q in questions %}
-                <div class="mb-5 pb-4 border-bottom last-border-none">
-                    <div class="d-flex gap-3 mb-3">
-                        <span class="badge bg-secondary rounded-pill flex-shrink-0 mt-1">№ {{ forloop.counter }}</span>
-                        <div class="flex-grow-1">
-                            <p class="fs-5 fw-semibold text-dark mb-2">{{ q.text|safe }}</p>
+    <!-- Questions Container -->
+    <div class="question-container">
+        <form method="post" id="test-form">
+            {% csrf_token %}
 
-                            {% if q.image %}
-                            <img src="{{ q.image.url }}" alt="Иллюстрация" class="img-fluid rounded border mb-3"
-                                style="max-height: 300px;">
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <!-- Блок вариантов ответа -->
-                    <div class="ms-4">
-                        {% if q.question_type == 'single_choice' or q.question_type == 'multiple_choice' %}
-                        {% for opt in q.options.all %}
-                        <div class="form-check mb-2">
-                            <input class="form-check-input"
-                                type="{% if q.question_type == 'single_choice' %}radio{% else %}checkbox{% endif %}"
-                                name="answer_{{ q.id }}" value="{{ opt.id }}" id="opt_{{ opt.id }}">
-                            <label class="form-check-label" for="opt_{{ opt.id }}">
-                                {{ opt.text }}
-                            </label>
-                        </div>
-                        {% endfor %}
-                        {% elif q.question_type == 'text_input' or q.question_type == 'number_input' %}
-                        <input type="{% if q.question_type == 'number_input' %}number{% else %}text{% endif %}"
-                            name="answer_{{ q.id }}" class="form-control form-control-lg"
-                            placeholder="Введите ответ...">
+            {% for q in questions %}
+            <div class="q-card" data-question-id="{{ q.id }}">
+                <div class="q-meta">
+                    <span class="q-number">Вопрос {{ forloop.counter }}</span>
+                    <span class="q-type-badge">
+                        {% if q.question_type == "single_choice" %}
+                        Выбор ответа
+                        {% elif q.question_type == "multiple_choice" %}
+                        Множественный выбор
+                        {% elif q.question_type == "text_input" %}
+                        Краткий ответ
+                        {% else %}
+                        Ответ
                         {% endif %}
-                    </div>
+                    </span>
                 </div>
-                {% empty %}
-                <p class="text-center text-muted">Вопросы не найдены.</p>
-                {% endfor %}
 
-                <div class="mt-4 pt-3 border-top">
-                    <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm">
-                        Завершить тест и отправить ответы
-                    </button>
+                <div class="q-text">{{ q.text|safe }}</div>
+
+                {% if q.image %}
+                <img src="{{ q.image.url }}" alt="Иллюстрация"
+                    style="max-width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+                {% endif %}
+
+                <!-- Types of Inputs -->
+                {% if q.question_type == 'single_choice' or q.question_type == 'multiple_choice' %}
+                <div class="options-grid">
+                    {% for opt in q.options.all %}
+                    <label class="option-tile" onclick="selectOption(this)">
+                        <!-- Hidden input for form submission -->
+                        <input type="{% if q.question_type == 'single_choice' %}radio{% else %}checkbox{% endif %}"
+                            name="answer_{{ q.id }}" value="{{ opt.id }}" style="display:none;" required>
+
+                        <span class="option-letter">{% cycle 'А' 'Б' 'В' 'Г' 'Д' %}</span>
+                        <span class="option-text">{{ opt.text }}</span>
+                    </label>
+                    {% endfor %}
                 </div>
-            </form>
-        </div>
+                {% else %}
+                <!-- Short Answer / Number -->
+                <input type="{% if q.question_type == 'number_input' %}number{% else %}text{% endif %}"
+                    name="answer_{{ q.id }}" class="short-answer-input" placeholder="Введите ответ..." required>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="submit-area">
+                <button type="submit" class="btn-submit-test">Завершить тест</button>
+            </div>
+        </form>
     </div>
 </div>
+
+<script>
+    // Logic to highlight selected tiles
+    function selectOption(tileElement) {
+        const parent = tileElement.closest('.options-grid');
+        const inputs = parent.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+
+        // For Radio buttons (Single Choice): deselect others
+        if (inputs[0].type === 'radio') {
+            parent.querySelectorAll('.option-tile').forEach(t => t.classList.remove('selected'));
+            tileElement.classList.add('selected');
+        }
+        // For Checkboxes (Multiple Choice): toggle current
+        else {
+            tileElement.classList.toggle('selected');
+        }
+    }
+
+    // Initialize selection state on page load (if browser remembers)
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('input:checked').forEach(input => {
+            input.closest('.option-tile').classList.add('selected');
+        });
+    });
+
+    // TIMER LOGIC
+    {% if exam_run.test.time_limit_minutes > 0 %}
+    let timeLeft = {{ exam_run.test.time_limit_minutes }} * 60;
+    const timerDisplay = document.getElementById('timer-display');
+
+    const countdown = setInterval(() => {
+        timeLeft--;
+
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+
+        timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        // Add warning class when less than 2 minutes
+        if (timeLeft <= 120) {
+            timerDisplay.classList.add('warning');
+        }
+
+        // Auto submit at 0
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            alert("Время вышло! Отправляю ваши ответы.");
+            document.getElementById('test-form').submit();
+        }
+    }, 1000);
+    {% endif %}
+</script>
 {% endblock %}

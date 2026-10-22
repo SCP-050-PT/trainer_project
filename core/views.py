@@ -20,9 +20,15 @@ from .models import (
 )
 from .utils.importer import parse_student_file, create_students_from_import
 
+
 # ==========================================
 # ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 # ==========================================
+def landing_view(request):
+    """Главная страница - выбор роли."""
+    return render(
+        request, "landing.html"
+    )  # Или можно вернуть None, чтобы base.html отработал сам
 
 
 def student_required(view_func):
@@ -185,10 +191,23 @@ def take_test(request, exam_run_id):
 
         return redirect("student_result", attempt_id=attempt.id)
 
+    type_labels = {
+        "single_choice": "Выбор ответа",
+        "multiple_choice": "Множественный выбор",
+        "text_input": "Краткий ответ",
+        "number_input": "Числовой ответ",
+    }
+
+    # Передаем этот словарь в контекст
     return render(
         request,
         "core/student/test.html",
-        {"exam_run": exam_run, "questions": questions, "attempt": attempt},
+        {
+            "exam_run": exam_run,
+            "questions": questions,
+            "attempt": attempt,
+            "type_labels": type_labels,  # <--- ДОБАВИЛИ ЭТО
+        },
     )
 
 
