@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-
+import dj_database_url
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,16 +50,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+
+   
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("PGDATABASE"),
-        "USER": os.getenv("PGUSER"),
-        "PASSWORD": os.getenv("PGPASSWORD"),
-        "HOST": os.getenv("PGHOST"),
-        "PORT": os.getenv("PGPORT", "5432"),
-    }
-}
+       "default": dj_database_url.config(
+           default=os.getenv("DATABASE_URL"),
+           conn_max_age=600,
+           ssl_require=True  # Важно для Render!
+       )
+   }
 STATIC_URL = 'static/'
 
 # ЕСЛИ ПАПКА STATIC ЛЕЖИТ В КОРНЕ ПРОЕКТА (рядом с manage.py):
