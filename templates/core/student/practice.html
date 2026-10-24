@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Тренировка{% endblock %}
+{% block student_content %}
+<div class="container py-4" style="max-width: 720px;">
+    <h3>{{ test.title }} <small class="text-muted">(тренировка)</small></h3>
+    {% if result %}
+        <div class="alert alert-info">
+            Результат: {{ result.correct }} из {{ result.total }} ({{ result.pct }}%)
+        </div>
+        {% for q, ok in result.details %}
+            <div class="card mb-2">
+                <div class="card-body">
+                    <p class="mb-1">{{ q.text }}</p>
+                    <span class="badge {% if ok %}bg-success{% else %}bg-danger{% endif %}">
+                        {% if ok %}Верно{% else %}Неверно{% endif %}
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
+        <a href="{% url 'practice_test' test.id %}" class="btn btn-primary mt-3">Ещё раз</a>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            {% for q in questions %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="fw-semibold">{{ q.text }}</p>
+                    {% if q.question_type == "single_choice" %}
+                        {% for opt in q.options.all %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer_{{ q.id }}" value="{{ opt.id }}" id="o{{ opt.id }}">
+                            <label class="form-check-label" for="o{{ opt.id }}">{{ opt.text }}</label>
+                        </div>
+                        {% endfor %}
+                    {% elif q.question_type == "multiple_choice" %}
+                        {% for opt in q.options.all %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="answer_{{ q.id }}" value="{{ opt.id }}" id="o{{ opt.id }}">
+                            <label class="form-check-label" for="o{{ opt.id }}">{{ opt.text }}</label>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <input type="text" name="answer_{{ q.id }}" class="form-control" placeholder="Ваш ответ">
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-success btn-lg">Проверить</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

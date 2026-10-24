@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Назначить тест{% endblock %}
+
+{% block staff_content %}
+<div class="container-fluid py-4">
+    <h2 class="mb-4">Назначить тест</h2>
+
+    <div class="card" style="max-width: 560px;">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Тест</label>
+                    <select name="test" class="form-select" required>
+                        <option value="">— выберите —</option>
+                        {% for t in tests %}
+                            <option value="{{ t.id }}">{{ t.title }} ({{ t.subject.name }}, {{ t.grade_level }} кл.)</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Класс</label>
+                    <select name="school_class" class="form-select" required>
+                        <option value="">— выберите —</option>
+                        {% for c in classes %}
+                            <option value="{{ c.id }}">{{ c.display_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Дедлайн (необязательно)</label>
+                    <input type="datetime-local" name="deadline" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Назначить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

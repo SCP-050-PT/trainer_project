@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Создать учителя{% endblock %}
+{% block staff_content %}
+<div class="container-fluid py-4">
+    <h2 class="mb-4">Создать учителя</h2>
+    <div class="card" style="max-width: 480px;">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Логин</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Предмет</label>
+                    <select name="subject" class="form-select">
+                        <option value="">— без предмета —</option>
+                        {% for s in subjects %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Создать</button>
+                <a href="{% url 'teacher_list' %}" class="btn btn-outline-secondary ms-2">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

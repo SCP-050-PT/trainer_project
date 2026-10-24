@@ -1,21 +1,46 @@
 from django.urls import path
-from . import views
+from .views import (
+    student_login_view,
+    student_dashboard,
+    take_test,
+    student_result,
+    student_logout,
+    practice_test,
+    dashboard_view,
+    import_students_view,
+    student_list_view,
+    export_students_csv,
+    assign_test_view,
+    exam_run_list_view,
+    close_exam_run,
+    class_list_view,
+    class_detail_view,
+    exam_run_stats_view,
+    create_class_view,
+    instruction_view,
+    teacher_list_view,
+    create_teacher_view,
+)
 
 urlpatterns = [
-    # --- ДЛЯ УЧЕНИКА ---
-    # 1. Вход ученика (выбор класса + PIN) — ЭТОГО НЕ ХВАТАЛО!
-    path("student-login/", views.student_login_view, name="student_login"),
-    # 2. Кабинет ученика (список тестов)
-    path("student-dashboard/", views.student_dashboard, name="student_dashboard"),
-    # 3. Прохождение конкретного теста
-    path("take-test/<int:exam_run_id>/", views.take_test, name="take_test"),
-    # 4. Результат теста
-    path("result/<int:attempt_id>/", views.student_result, name="student_result"),
-    # 5. Выход ученика
-    path("student-logout/", views.student_logout, name="student_logout"),
-    # --- ДЛЯ УЧИТЕЛЯ / АДМИНА ---
-    # 6. Дашборд сотрудника
-    path("dashboard/", views.dashboard_view, name="dashboard"),
-    # 7. Импорт списков учеников
-    path("import-students/", views.import_students_view, name="import_students"),
+    path("student-login/", student_login_view, name="student_login"),
+    path("student-dashboard/", student_dashboard, name="student_dashboard"),
+    path("take-test/<int:exam_run_id>/", take_test, name="take_test"),
+    path("result/<int:attempt_id>/", student_result, name="student_result"),
+    path("student-logout/", student_logout, name="student_logout"),
+    path("practice/<int:test_id>/", practice_test, name="practice_test"),
+    path("dashboard/", dashboard_view, name="dashboard"),
+    path("import-students/", import_students_view, name="import_students"),
+    path("students/", student_list_view, name="student_list"),
+    path("students/export/", export_students_csv, name="export_students_csv"),
+    path("assign-test/", assign_test_view, name="assign_test"),
+    path("exam-runs/", exam_run_list_view, name="exam_run_list"),
+    path("exam-runs/<int:run_id>/close/", close_exam_run, name="close_exam_run"),
+    path("exam-runs/<int:run_id>/stats/", exam_run_stats_view, name="exam_run_stats"),
+    path("classes/", class_list_view, name="class_list"),
+    path("classes/<int:class_id>/", class_detail_view, name="class_detail"),
+    path("classes/create/", create_class_view, name="create_class"),
+    path("instruction/", instruction_view, name="instruction"),
+    path("teachers/", teacher_list_view, name="teacher_list"),
+    path("teachers/create/", create_teacher_view, name="create_teacher"),
 ]

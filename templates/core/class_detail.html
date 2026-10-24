@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Класс {{ school_class.display_name }}{% endblock %}
+{% block staff_content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Класс {{ school_class.display_name }}</h2>
+        <a href="{% url 'class_list' %}" class="btn btn-outline-secondary">Назад</a>
+    </div>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr><th>ФИО</th><th>PIN</th></tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    <tr>
+                        <td>{{ s.full_name }}</td>
+                        <td><code>{{ s.pin_code }}</code></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="2" class="text-center text-muted py-4">Учеников нет</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Создать класс{% endblock %}
+{% block staff_content %}
+<div class="container-fluid py-4">
+    <h2 class="mb-4">Создать класс</h2>
+    <div class="card" style="max-width: 400px;">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Параллель</label>
+                    <input type="number" name="parallel" class="form-control" min="1" max="11" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Литера</label>
+                    <input type="text" name="letter" class="form-control" maxlength="5" placeholder="А, Б, Д...">
+                </div>
+                <button type="submit" class="btn btn-primary">Создать</button>
+                <a href="{% url 'class_list' %}" class="btn btn-outline-secondary ms-2">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

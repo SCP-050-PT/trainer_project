@@ -1,0 +1,19 @@
+# Виртуальное окружение
+venv/
+.venv/
+# Секреты
+.env
+# Кэш Python
+__pycache__/
+*.pyc
+*.pyo
+# Локальная БД
+db.sqlite3
+# Собранные статики
+staticfiles/
+# IDE
+.vscode/
+.idea/
+# OS
+.DS_Store
+Thumbs.db

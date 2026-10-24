@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Инструкция{% endblock %}
+{% block staff_content %}
+<div class="container-fluid py-4" style="max-width: 800px;">
+    <h2 class="mb-4">Инструкция для учителя</h2>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>1. Импорт учеников</h5>
+            <p>Меню → «Импорт списков». Выберите класс и загрузите Excel/CSV с колонкой ФИО. Система выдаст PIN-коды.</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>2. Посмотреть PIN</h5>
+            <p>Меню → «Список учеников» или «Классы» → нужный класс. Можно экспортировать в CSV.</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>3. Назначить тест</h5>
+            <p>Меню → «Назначить тест». Выберите тест и класс. Ученики увидят его в своём кабинете.</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>4. Статистика</h5>
+            <p>Меню → «Назначенные тесты» → кнопка «Статистика». Там видно, кто прошёл и средний результат.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5>5. Тренировка для учеников</h5>
+            <p>Ученик в своём кабинете видит блок «Тренировка» — тесты без сохранения результата.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

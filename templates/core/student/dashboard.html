@@ -34,6 +34,31 @@
     </div>
 
     <!-- История результатов (если есть пройденные) -->
+    {% if practice_tests %}
+    <h5 class="mt-5 mb-3">Тренировка (без сохранения)</h5>
+    <div class="list-group">
+        {% for t in practice_tests %}
+        <a href="{% url 'practice_test' t.id %}" class="list-group-item list-group-item-action">
+            {{ t.title }} <small class="text-muted">({{ t.subject.name }})</small>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="alert alert-light border mt-4">
+        <strong>Тренировка:</strong> можно пройти любой тест без сохранения результата.
+        Попросите учителя дать ссылку вида <code>/practice/ID/</code>
+    </div>
+    {% if practice_tests %}
+    <h5 class="mt-5 mb-3">Тренировка (без сохранения)</h5>
+    <div class="list-group">
+        {% for t in practice_tests %}
+        <a href="{% url 'practice_test' t.id %}" class="list-group-item list-group-item-action">
+            {{ t.title }} <small class="text-muted">({{ t.subject.name }})</small>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% else %}
     <div class="alert alert-info text-center py-5 rounded-3 border-0 shadow-sm">
         <i class="bi bi-check-circle-fill fs-1 text-success mb-3 d-block"></i>

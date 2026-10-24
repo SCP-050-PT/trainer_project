@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Обзор{% endblock %}
+
+{% block staff_content %}
+<div class="container-fluid py-4">
+    <h2 class="mb-4">Обзор</h2>
+
+    <div class="row g-3">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Учеников</h5>
+                    <p class="display-6 mb-0">{{ total_students }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Пройдено тестов</h5>
+                    <p class="display-6 mb-0">{{ total_attempts }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Средний %</h5>
+                    <p class="display-6 mb-0">{{ avg_percentage }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Активных назначений</h5>
+                    <p class="display-6 mb-0">{{ active_runs }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if recent %}
+    <h4 class="mt-5 mb-3">Последние прохождения</h4>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-sm mb-0">
+                <thead class="table-light"><tr><th>Ученик</th><th>Тест</th><th>%</th></tr></thead>
+                <tbody>
+                    {% for a in recent %}
+                    <tr>
+                        <td>{{ a.student.full_name }}</td>
+                        <td>{{ a.exam_run.test.title }}</td>
+                        <td>{{ a.percentage|floatformat:0 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
