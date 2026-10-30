@@ -9,6 +9,7 @@ from .views import (
     dashboard_view,
     import_students_view,
     student_list_view,
+    student_detail_view,
     export_students_csv,
     assign_test_view,
     exam_run_list_view,
@@ -17,9 +18,14 @@ from .views import (
     class_detail_view,
     exam_run_stats_view,
     create_class_view,
+    edit_class_view,
+    delete_class_view,
     instruction_view,
     teacher_list_view,
     create_teacher_view,
+    change_password_view,
+    create_test_view,
+    export_report_view,
 )
 
 urlpatterns = [
@@ -32,6 +38,7 @@ urlpatterns = [
     path("dashboard/", dashboard_view, name="dashboard"),
     path("import-students/", import_students_view, name="import_students"),
     path("students/", student_list_view, name="student_list"),
+    path("students/<int:student_id>/", student_detail_view, name="student_detail"),
     path("students/export/", export_students_csv, name="export_students_csv"),
     path("assign-test/", assign_test_view, name="assign_test"),
     path("exam-runs/", exam_run_list_view, name="exam_run_list"),
@@ -40,7 +47,12 @@ urlpatterns = [
     path("classes/", class_list_view, name="class_list"),
     path("classes/<int:class_id>/", class_detail_view, name="class_detail"),
     path("classes/create/", create_class_view, name="create_class"),
+    path("classes/<int:class_id>/edit/", edit_class_view, name="edit_class"),
+    path("classes/<int:class_id>/delete/", delete_class_view, name="delete_class"),
     path("instruction/", instruction_view, name="instruction"),
     path("teachers/", teacher_list_view, name="teacher_list"),
     path("teachers/create/", create_teacher_view, name="create_teacher"),
+    path("change-password/", change_password_view, name="change_password"),
+    path("tests/create/", create_test_view, name="create_test"),
+    path("export-report/", export_report_view, name="export_report"),
 ]

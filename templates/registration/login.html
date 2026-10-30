@@ -2,34 +2,37 @@
 {% block title %}Вход для сотрудника{% endblock %}
 
 {% block guest_content %}
-<div class="card shadow-lg border-0 rounded-4 overflow-hidden">
-    <div class="card-body p-5 text-center">
-        <h2 class="fw-bold text-primary mb-4">Вход для сотрудников</h2>
-
-        {% if form.errors %}
-        <div class="alert alert-danger mb-4">Неверный логин или пароль.</div>
-        {% endif %}
-
-        <form method="post" action="{% url 'login' %}">
-            {% csrf_token %}
-
-            <div class="mb-3 text-start">
-                <label for="id_username" class="form-label fw-semibold">Логин</label>
-                {{ form.username }}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="card border-0 shadow" style="width: 100%; max-width: 400px;">
+        <div class="card-body p-4">
+            <div class="text-center mb-4">
+                <svg viewBox="0 0 24 24" style="width:48px;height:48px;fill:#7c3aed"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path></svg>
+                <h4 class="fw-bold mt-2 mb-1">Школьный портал</h4>
+                <p class="text-muted small">Вход для сотрудников</p>
             </div>
 
-            <div class="mb-4 text-start">
-                <label for="id_password" class="form-label fw-semibold">Пароль</label>
-                {{ form.password }}
+            {% if form.errors %}
+            <div class="alert alert-danger py-2">Неверный логин или пароль</div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Логин</label>
+                    <input type="text" name="username" class="form-control" required autofocus>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-purple w-100 py-2">Войти</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="/" class="small text-muted">← На главную</a>
             </div>
-
-            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-5">Войти</button>
-        </form>
-
-        <hr class="my-4">
-        <div class="text-center">
-            <a href="/" class="text-decoration-none small text-secondary">&larr; Вернуться к входу учеников</a>
         </div>
     </div>
 </div>
+<script>document.addEventListener('DOMContentLoaded',()=>{if(window.lucide)lucide.createIcons();})</script>
 {% endblock %}

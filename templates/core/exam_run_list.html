@@ -1,64 +1,69 @@
 {% extends "base.html" %}
-
-{% block title %}Назначенные тесты{% endblock %}
+{% block title %}Экзамены{% endblock %}
+{% block header_title %}Экзамены{% endblock %}
 
 {% block staff_content %}
 <div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Назначенные тесты</h2>
-        <a href="{% url 'assign_test' %}" class="btn btn-primary">Назначить новый</a>
+    <div class="d-flex gap-2 mb-4">
+        <a href="{% url 'assign_test' %}" class="btn btn-purple">Назначить тест</a>
+        <a href="/admin-teacher/" target="_blank" class="btn btn-outline-secondary">Редактор тестов</a>
     </div>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+    <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5 class="mb-1">Активные экзамены</h5>
+            <p class="text-muted small mb-3">Текущие назначения.</p>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead><tr><th>Тест</th><th>Класс</th><th>Дедлайн</th><th></th></tr></thead>
+                    <tbody>
+                        {% for run in runs %}
+                        {% if run.status == "active" %}
+                        <tr>
+                            <td>{{ run.test.title }}</td>
+                            <td>{{ run.school_class.display_name }}</td>
+                            <td>{{ run.deadline|date:"d.m.Y H:i"|default:"—" }}</td>
+                            <td>
+                                <a href="{% url 'exam_run_stats' run.id %}" class="btn btn-sm btn-light border me-1">Статистика</a>
+                                <form method="post" action="{% url 'close_exam_run' run.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Закрыть?')">Закрыть</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center text-muted py-3">Нет активных</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    <div class="card">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Тест</th>
-                        <th>Класс</th>
-                        <th>Дедлайн</th>
-                        <th>Статус</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for run in runs %}
-                    <tr>
-                        <td>{{ run.test.title }}</td>
-                        <td>{{ run.school_class.display_name }}</td>
-                        <td>{{ run.deadline|date:"d.m.Y H:i"|default:"—" }}</td>
-                        <td>
-                            <a href="{% url 'exam_run_stats' run.id %}" class="btn btn-sm btn-outline-primary me-1">Статистика</a>
-                            {% if run.status == "active" %}
-                                <span class="badge bg-success">Активен</span>
-                            {% else %}
-                                <span class="badge bg-secondary">Закрыт</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{% url 'exam_run_stats' run.id %}" class="btn btn-sm btn-outline-primary me-1">Статистика</a>
-                            {% if run.status == "active" %}
-                            <form method="post" action="{% url 'close_exam_run' run.id %}" class="d-inline">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                        onclick="return confirm('Закрыть этот тест?')">Закрыть</button>
-                            </form>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center text-muted py-4">Назначений пока нет</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="card border-0 shadow-sm" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5 class="mb-1">История экзаменов</h5>
+            <p class="text-muted small mb-3">Завершённые назначения.</p>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead><tr><th>Тест</th><th>Класс</th><th>Дедлайн</th><th></th></tr></thead>
+                    <tbody>
+                        {% for run in runs %}
+                        {% if run.status != "active" %}
+                        <tr>
+                            <td>{{ run.test.title }}</td>
+                            <td>{{ run.school_class.display_name }}</td>
+                            <td>{{ run.deadline|date:"d.m.Y H:i"|default:"—" }}</td>
+                            <td><a href="{% url 'exam_run_stats' run.id %}" class="btn btn-sm btn-light border">Результаты</a></td>
+                        </tr>
+                        {% endif %}
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center text-muted py-3">История пуста</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

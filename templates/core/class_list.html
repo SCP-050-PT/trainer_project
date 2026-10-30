@@ -1,26 +1,133 @@
 {% extends "base.html" %}
-{% block title %}Классы{% endblock %}
+{% block title %}Управление классами{% endblock %}
+{% block header_title %}Управление классами{% endblock %}
 {% block staff_content %}
 <div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="mb-0">Классы</h2><a href="{% url 'create_class' %}" class="btn btn-primary">Создать класс</a></div>
+    <div class="d-flex justify-content-end align-items-center mb-4">
+        <button class="btn btn-purple" data-bs-toggle="modal" data-bs-target="#addClassModal">
+            <i data-lucide="plus"></i> Добавить класс
+        </button>
+    </div>
+
     <div class="card">
         <div class="table-responsive">
             <table class="table table-hover mb-0">
                 <thead class="table-light">
-                    <tr><th>Класс</th><th>Учеников</th></tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название класса</th>
+                        <th>Кол-во учеников</th>
+                        <th>Действия</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {% for c in classes %}
                     <tr>
+                        <td>{{ c.id }}</td>
                         <td><a href="{% url 'class_detail' c.id %}">{{ c.display_name }}</a></td>
-                        <td>{{ c.student_count }}</td>
+                        <td><span class="badge badge-success">{{ c.student_count }} уч.</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-light border me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ c.id }}" title="Редактировать">
+                                <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#6b7280"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path></svg>
+                            </button>
+                            <button class="btn btn-sm btn-light border me-1" data-bs-toggle="modal" data-bs-target="#importModal{{ c.id }}" title="Импорт">
+                                <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#6b7280"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"></path></svg>
+                            </button>
+                            <form method="post" action="{% url 'delete_class' c.id %}" class="d-inline" onsubmit="return confirm('Удалить класс?')">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-light border text-danger" title="Удалить">
+                                    <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
+
+                    <!-- Import modal for this class -->
+                    <div class="modal fade" id="importModal{{ c.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form method="post" action="{% url 'import_students' %}" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="school_class" value="{{ c.id }}">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Импорт в {{ c.display_name }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="file" name="file" class="form-control" accept=".xlsx,.xls,.csv" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                        <button type="submit" class="btn btn-purple">Загрузить</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal fade" id="editModal{{ c.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form method="post" action="{% url 'edit_class' c.id %}">
+                                    {% csrf_token %}
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Редактировать {{ c.display_name }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Параллель</label>
+                                            <input type="number" name="parallel" class="form-control" value="{{ c.parallel }}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Литера</label>
+                                            <input type="text" name="letter" class="form-control" value="{{ c.letter }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                        <button type="submit" class="btn btn-purple">Сохранить</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     {% empty %}
-                    <tr><td colspan="2" class="text-center text-muted py-4">Классов нет</td></tr>
+                    <tr><td colspan="4" class="text-center text-muted py-4">Классов нет</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<!-- Add class modal -->
+<div class="modal fade" id="addClassModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="{% url 'create_class' %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title">Новый класс</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Параллель</label>
+                        <input type="number" name="parallel" class="form-control" min="1" max="11" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Литера</label>
+                        <input type="text" name="letter" class="form-control" maxlength="2" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-purple">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>document.addEventListener('DOMContentLoaded',()=>{if(window.lucide)lucide.createIcons();})</script>
 {% endblock %}

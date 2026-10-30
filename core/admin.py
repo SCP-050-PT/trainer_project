@@ -136,3 +136,51 @@ class AttemptAdmin(admin.ModelAdmin):
 class AnswerAttemptAdmin(admin.ModelAdmin):
     list_display = ("attempt", "question", "is_correct", "answered_at")
     raw_id_fields = ("attempt", "question")
+
+
+# Упрощаем заголовки админки
+admin.site.site_header = "Тренажёр №777 — админка"
+admin.site.site_title = "Тренажёр"
+admin.site.index_title = "Управление"
+
+
+from django.contrib.admin import AdminSite
+
+
+class TeacherAdminSite(AdminSite):
+    site_header = "Школьный портал"
+    site_title = "Учитель"
+    index_title = "Создание тестов и вопросов"
+
+
+teacher_admin = TeacherAdminSite(name="teacher_admin")
+
+
+# Регистрируем только нужные модели для учителя
+from .models import Test, Question, AnswerOption, CorrectAnswer, Subject
+
+
+class TeacherTestAdmin(admin.ModelAdmin):
+    list_display = ("title", "subject", "grade_level", "is_active")
+    list_filter = ("subject", "grade_level")
+    filter_horizontal = ("questions",)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_admin():
+            return qs
+        # Учитель видит только тесты своих предметов
+        subjects = [a.subject for a in request.user.assignments.all()]
+        return qs.filter(subject__in=subjects)
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        super().save_model(request, obj, form, change)
+
+
+teacher_admin.register(Test, TeacherTestAdmin)
+teacher_admin.register(Question)
+teacher_admin.register(AnswerOption)
+teacher_admin.register(CorrectAnswer)
+teacher_admin.register(Subject)

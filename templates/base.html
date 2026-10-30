@@ -26,7 +26,7 @@
         /* Боковое меню */
         .sidebar {
             width: 260px;
-            background: #1e293b;
+            background: #ffffff; border-right: 1px solid #e5e7eb;
             color: white;
             position: fixed;
             top: 0;
@@ -43,7 +43,7 @@
             padding: 1.5rem;
             font-size: 1.25rem;
             font-weight: 700;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid #e5e7eb;
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -66,7 +66,7 @@
             align-items: center;
             gap: 0.75rem;
             padding: 0.75rem 1rem;
-            color: rgba(255, 255, 255, 0.7);
+            color: #4b5563;
             text-decoration: none;
             border-radius: 8px;
             transition: all 0.2s;
@@ -75,8 +75,8 @@
 
         .nav-link-sidebar:hover,
         .nav-link-sidebar.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: #f3f4f6;
+            color: #111827;
         }
 
         .nav-link-sidebar i {
@@ -135,7 +135,64 @@
         .mobile-toggle-btn {
             display: none;
         }
+    
+        .btn-purple { background: #7c3aed; color: white; border: none; }
+        .btn-purple:hover { background: #6d28d9; color: white; }
+        .text-purple { color: #7c3aed !important; }
+    
+
+        /* Closer to reference */
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.25rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .stat-card:hover { transform: translateY(-2px); transition: .2s; }
+        .custom-table th {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            background: #f8fafc;
+            padding: 1rem 1.25rem;
+        }
+        .custom-table td { padding: 1rem 1.25rem; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .btn-action {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-action:hover { border-color: #7c3aed; color: #7c3aed; }
+
+        .stat-icon {
+            width: 64px; height: 64px;
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; color: white;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        .content-area { background: #f8fafc; }
+        .sidebar-nav a.active {
+            background: linear-gradient(90deg, #eff6ff 0%, #ffffff 100%);
+            color: #7c3aed;
+        }
+
+        .badge-success { background: #d1fae5; color: #065f46; padding: 6px 12px; border-radius: 8px; font-weight: 600; }
+        .table thead th { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #64748b; }
+        .card { border-radius: 16px; border: 1px solid #f1f5f9; }
+        .btn-purple { background: #7c3aed; border: none; }
+        .btn-purple:hover { background: #6d28d9; }
+        .sidebar-nav a { border-radius: 12px; margin: 2px 12px; }
+        .sidebar-nav a.active { background: #f5f3ff; color: #7c3aed; }
     </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body class="{% if request.session.student_name %}bg-light{% endif %}">
@@ -149,70 +206,51 @@
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebarMenu">
             <div class="sidebar-brand">
-                <i class="bi bi-mortarboard-fill fs-4"></i>
-                <span>Тренажёр №777</span>
+                <svg viewBox="0 0 24 24" style="width:28px;height:28px;fill:#7c3aed"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path></svg>
+                <span style="color:#111827; font-weight:700;">ШКОЛЬНЫЙ<br>ПОРТАЛ</span>
             </div>
 
             <ul class="sidebar-nav">
                 <li class="nav-item-sidebar">
-                    <a href="{% url 'dashboard' %}"
-                        class="nav-link-sidebar {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                        <i class="bi bi-speedometer2"></i> Обзор
+                    <a href="{% url 'dashboard' %}" class="nav-link-sidebar {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path></svg> Обзор
                     </a>
                 </li>
-
                 <li class="nav-item-sidebar">
-                    <a href="{% url 'import_students' %}"
-                        class="nav-link-sidebar {% if request.resolver_match.url_name == 'import_students' %}active{% endif %}">
-                        <i class="bi bi-file-earmark-excel"></i> Импорт списков
+                    <a href="{% url 'class_list' %}" class="nav-link-sidebar {% if request.resolver_match.url_name == 'class_list' %}active{% endif %}">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:currentColor"><path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3-5-3z"></path></svg> Классы
                     </a>
                 </li>
-
                 <li class="nav-item-sidebar">
-                    <a href="{% url 'student_list' %}"
-                        class="nav-link-sidebar {% if request.resolver_match.url_name == 'student_list' %}active{% endif %}">
-                        <i class="bi bi-people"></i> Список учеников
+                    <a href="{% url 'student_list' %}" class="nav-link-sidebar {% if request.resolver_match.url_name == 'student_list' %}active{% endif %}">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg> Ученики
                     </a>
                 </li>
-
                 <li class="nav-item-sidebar">
-                    <a href="{% url 'assign_test' %}"
-                        class="nav-link-sidebar {% if request.resolver_match.url_name == 'assign_test' %}active{% endif %}">
-                        <i class="bi bi-journal-plus"></i> Назначить тест
+                    <a href="{% url 'exam_run_list' %}" class="nav-link-sidebar {% if request.resolver_match.url_name == 'exam_run_list' %}active{% endif %}">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:currentColor"><path d="M20.2 6.3l-1.6-3.8C18.4 2.1 18 2 17.5 2H6.5C6 2 5.6 2.1 5.4 2.5l-1.6 3.8C2.6 6.9 2 8.4 2 10c0 3.9 2.9 7.2 6.6 7.9 1 1.7 2.6 3 4.4 3.7V22h-2v2h8v-2h-2v-.4c1.8-.7 3.4-2 4.4-3.7 3.7-.7 6.6-4 6.6-7.9 0-1.6-.6-3.1-1.8-3.7z"></path></svg> Экзамены
                     </a>
                 </li>
-
                 <li class="nav-item-sidebar">
-                    <a href="{% url 'exam_run_list' %}"
-                        class="nav-link-sidebar {% if request.resolver_match.url_name == 'exam_run_list' %}active{% endif %}">
-                        <i class="bi bi-list-check"></i> Назначенные тесты
+                    <a href="{% url 'change_password' %}" class="nav-link-sidebar {% if request.resolver_match.url_name == 'change_password' %}active{% endif %}">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg> Профиль
                     </a>
                 </li>
-
                 <li class="nav-item-sidebar">
-                    <a href="{% url 'class_list' %}"
-                        class="nav-link-sidebar {% if request.resolver_match.url_name == 'class_list' %}active{% endif %}">
-                        <i class="bi bi-building"></i> Классы
+                    <a href="{% url 'instruction' %}" class="nav-link-sidebar {% if request.resolver_match.url_name == 'instruction' %}active{% endif %}">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"></path></svg> Инструкция
                     </a>
                 </li>
-
-                <li class="nav-item-sidebar">
-                    <a href="{% url 'instruction' %}"
-                        class="nav-link-sidebar {% if request.resolver_match.url_name == 'instruction' %}active{% endif %}">
-                        <i class="bi bi-question-circle"></i> Инструкция
-                    </a>
-                </li>
-                
-                {% if user.role == 'admin' %}
-                <li class="nav-item-sidebar">
-                    <a href="{% url 'teacher_list' %}"
-                        class="nav-link-sidebar {% if request.resolver_match.url_name == 'teacher_list' %}active{% endif %}">
-                        <i class="bi bi-person-badge"></i> Учителя
-                    </a>
-                </li>
-                {% endif %}
-
             </ul>
+
+            <div class="p-3 mt-auto">
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger w-100">
+                        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5a2 2 0 0 0-2 2v4h2V5h14v14H5v-4H3v4a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path></svg> Выйти из системы
+                    </button>
+                </form>
+            </div>
 
 
         </aside>
@@ -229,28 +267,12 @@
                     <h5 class="m-0 fw-bold text-dark">{% block header_title %}Личный кабинет{% endblock %}</h5>
                 </div>
 
-                <div class="dropdown">
-                    <a href="#"
-                        class="d-flex align-items-center text-decoration-none dropdown-toggle text-dark fw-semibold"
-                        data-bs-toggle="dropdown">
-                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2"
-                            style="width: 32px; height: 32px;">
-                            {{ user.username|slice:":1"|upper }}
-                        </div>
-                        <span>{{ user.username }}</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                        <li><a class="dropdown-item" href="#">Профиль</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <form action="{% url 'logout' %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="dropdown-item text-danger">Выход</button>
-                            </form>
-                        </li>
-                    </ul>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted">{{ user.get_full_name|default:user.username }}</span>
+                    <div class="rounded-circle text-white d-flex align-items-center justify-content-center"
+                        style="width: 32px; height: 32px; background:#7c3aed; font-weight:600;">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
                 </div>
             </header>
 
@@ -329,6 +351,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     {% block scripts %}{% endblock %}
+    <script>lucide.createIcons();</script>
 </body>
 
 </html>

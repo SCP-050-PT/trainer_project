@@ -194,6 +194,8 @@ class Question(models.Model):
     class Meta:
         db_table = "questions"
         ordering = ["-created_at"]
+        verbose_name = "Вопрос"
+        verbose_name_plural = "Вопросы"
 
     def __str__(self):
         return f"[{self.get_difficulty_display()}] {self.text[:50]}..."
@@ -212,6 +214,8 @@ class AnswerOption(models.Model):
     class Meta:
         db_table = "answer_options"
         ordering = ["order", "id"]
+        verbose_name = "Вариант ответа"
+        verbose_name_plural = "Варианты ответов"
 
     def __str__(self):
         mark = "✓" if self.is_correct else "✗"

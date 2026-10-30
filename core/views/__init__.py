@@ -11,6 +11,7 @@ from .staff import (
     dashboard_view,
     import_students_view,
     student_list_view,
+    student_detail_view,
     export_students_csv,
     assign_test_view,
     exam_run_list_view,
@@ -19,9 +20,14 @@ from .staff import (
     class_detail_view,
     exam_run_stats_view,
     create_class_view,
+    edit_class_view,
+    delete_class_view,
     instruction_view,
     teacher_list_view,
     create_teacher_view,
+    change_password_view,
+    create_test_view,
+    export_report_view,
 )
 
 __all__ = [
@@ -36,6 +42,7 @@ __all__ = [
     "dashboard_view",
     "import_students_view",
     "student_list_view",
+    "student_detail_view",
     "export_students_csv",
     "assign_test_view",
     "exam_run_list_view",
@@ -44,7 +51,12 @@ __all__ = [
     "class_detail_view",
     "exam_run_stats_view",
     "create_class_view",
+    "edit_class_view",
+    "delete_class_view",
     "instruction_view",
     "teacher_list_view",
     "create_teacher_view",
+    "change_password_view",
+    "create_test_view",
+    "export_report_view",
 ]

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ student.full_name }}{% endblock %}
+{% block header_title %}Ученик{% endblock %}
+{% block staff_content %}
+<div class="container-fluid py-4">
+    <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h4 class="mb-1">{{ student.full_name }}</h4>
+            <p class="text-muted mb-3">{{ student.school_class.display_name }} · PIN: <code>{{ student.pin_code }}</code></p>
+            <div class="d-flex gap-4">
+                <div><span class="text-muted small">Пройдено</span><div class="fs-4 fw-bold">{{ total_attempts }}</div></div>
+                <div><span class="text-muted small">Средний %</span><div class="fs-4 fw-bold">{{ avg_percentage }}</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5 class="mb-3">Последние прохождения</h5>
+            <table class="table mb-0">
+                <thead><tr><th>Тест</th><th>Дата</th><th>%</th></tr></thead>
+                <tbody>
+                    {% for a in attempts %}
+                    <tr>
+                        <td>{{ a.exam_run.test.title }}</td>
+                        <td>{{ a.started_at|date:"d.m.Y H:i" }}</td>
+                        <td>{{ a.percentage|floatformat:0 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3" class="text-muted text-center">Нет данных</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <a href="{% url 'student_list' %}" class="btn btn-outline-secondary mt-3">← Назад</a>
+</div>
+{% endblock %}

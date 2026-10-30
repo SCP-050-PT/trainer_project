@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block header_title %}Ученики{% endblock %}
 {% block title %}Список учеников{% endblock %}
 
 {% block staff_content %}
 <div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Список учеников</h2>
+    <div class="d-flex justify-content-end align-items-center mb-4">
         <a href="{% url 'export_students_csv' %}?q={{ query }}&class={{ selected_class }}" class="btn btn-success">
             <i class="bi bi-download"></i> Экспорт CSV
         </a>
@@ -44,7 +44,7 @@
                 <tbody>
                     {% for s in students %}
                     <tr>
-                        <td>{{ s.full_name }}</td>
+                        <td><a href="{% url 'student_detail' s.id %}">{{ s.full_name }}</a></td>
                         <td>{{ s.school_class.display_name }}</td>
                         <td><code>{{ s.pin_code }}</code></td>
                     </tr>

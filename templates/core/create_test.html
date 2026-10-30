@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Создать тест{% endblock %}
+{% block staff_content %}
+<div class="container-fluid py-4">
+    <h2 class="mb-4">Создать тест</h2>
+    <div class="card" style="max-width: 520px;">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Название</label>
+                    <input type="text" name="title" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Предмет</label>
+                    <select name="subject" class="form-select" required>
+                        <option value="">— выберите —</option>
+                        {% for s in subjects %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Параллель</label>
+                    <input type="number" name="grade_level" class="form-control" min="1" max="11" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Создать</button>
+            </form>
+            <p class="text-muted small mt-3 mb-0">Вопросы к тесту добавляются через техническую админку.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

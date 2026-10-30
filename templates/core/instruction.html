@@ -1,41 +1,54 @@
 {% extends "base.html" %}
 {% block title %}Инструкция{% endblock %}
+{% block header_title %}Инструкция{% endblock %}
 {% block staff_content %}
 <div class="container-fluid py-4" style="max-width: 800px;">
-    <h2 class="mb-4">Инструкция для учителя</h2>
-
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>1. Импорт учеников</h5>
-            <p>Меню → «Импорт списков». Выберите класс и загрузите Excel/CSV с колонкой ФИО. Система выдаст PIN-коды.</p>
+    <div class="card border-0 shadow-sm mb-3" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5>1. Добавить класс</h5>
+            <p class="mb-0 text-muted">Меню → «Классы» → кнопка «Добавить класс». Укажите параллель и литеру.</p>
         </div>
     </div>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>2. Посмотреть PIN</h5>
-            <p>Меню → «Список учеников» или «Классы» → нужный класс. Можно экспортировать в CSV.</p>
+    <div class="card border-0 shadow-sm mb-3" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5>2. Импорт учеников</h5>
+            <p class="mb-0 text-muted">В таблице классов нажмите иконку загрузки рядом с классом. Загрузите Excel/CSV с колонкой ФИО. Система выдаст PIN-коды.</p>
         </div>
     </div>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>3. Назначить тест</h5>
-            <p>Меню → «Назначить тест». Выберите тест и класс. Ученики увидят его в своём кабинете.</p>
+    <div class="card border-0 shadow-sm mb-3" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5>3. Посмотреть PIN</h5>
+            <p class="mb-0 text-muted">Меню → «Ученики». Можно искать по ФИО, фильтровать по классу и экспортировать в CSV.</p>
         </div>
     </div>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>4. Статистика</h5>
-            <p>Меню → «Назначенные тесты» → кнопка «Статистика». Там видно, кто прошёл и средний результат.</p>
+    <div class="card border-0 shadow-sm mb-3" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5>4. Создать тест</h5>
+            <p class="mb-0 text-muted">Меню → «Экзамены» → «Редактор тестов». Откроется ограниченная админка, где можно создавать тесты и вопросы.</p>
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <h5>5. Тренировка для учеников</h5>
-            <p>Ученик в своём кабинете видит блок «Тренировка» — тесты без сохранения результата.</p>
+    <div class="card border-0 shadow-sm mb-3" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5>5. Назначить тест</h5>
+            <p class="mb-0 text-muted">Меню → «Экзамены» → «Назначить тест». Выберите тест, класс и дедлайн. Ученики увидят его в кабинете.</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-3" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5>6. Статистика</h5>
+            <p class="mb-0 text-muted">В разделе «Экзамены» нажмите «Статистика» у назначения. На «Обзоре» есть график активности и экспорт отчёта.</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <h5>7. Профиль</h5>
+            <p class="mb-0 text-muted">Меню → «Профиль». Можно изменить имя, фамилию, предмет и пароль.</p>
         </div>
     </div>
 </div>

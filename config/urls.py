@@ -1,4 +1,5 @@
 from django.contrib import admin
+from core.admin import teacher_admin
 from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 from core.views import landing_view
@@ -6,6 +7,7 @@ from core.views import landing_view
 urlpatterns = [
     # 1. Админка Django
     path("admin/", admin.site.urls),
+    path("admin-teacher/", teacher_admin.urls),
     # 2. Вход для СОТРУДНИКОВ -> /staff-login/
     path(
         "staff-login/",

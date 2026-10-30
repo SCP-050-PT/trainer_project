@@ -1,49 +1,42 @@
 {% extends "base.html" %}
-{% block title %}Вход для ученика{% endblock %}
+{% block title %}Вход ученика{% endblock %}
 
-{# ВАЖНО: Используем guest_content, так как ученик при входе еще не авторизован в системе #}
 {% block guest_content %}
-<div class="card shadow-lg border-0 rounded-4 overflow-hidden">
-    <div class="card-body p-5 text-center">
-        <h2 class="fw-bold text-primary mb-4">Вход в систему</h2>
-
-        {% if error %}
-        <div class="alert alert-danger mb-4">{{ error }}</div>
-        {% endif %}
-
-        <form method="post">
-            {% csrf_token %}
-
-            <div class="mb-3 text-start">
-                <label for="school_class" class="form-label fw-semibold">Выберите ваш класс</label>
-                <select name="school_class" id="school_class" class="form-select form-select-lg" required>
-                    <option value="" disabled selected>-- Выберите класс --</option>
-                    {% for c in classes %}
-                    <option value="{{ c.id }}">{{ c.display_name }}</option>
-                    {% empty %}
-                    <option disabled>Классы не добавлены</option>
-                    {% endfor %}
-                </select>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="card border-0 shadow" style="width: 100%; max-width: 400px;">
+        <div class="card-body p-4">
+            <div class="text-center mb-4">
+                <i class="bi bi-person-badge fs-1 text-success"></i>
+                <h4 class="fw-bold mt-2 mb-1">Школьный портал</h4>
+                <p class="text-muted small">Вход ученика</p>
             </div>
 
-            <div class="mb-4 text-start">
-                <label for="pin_code" class="form-label fw-semibold">Введите PIN-код</label>
-                <input type="password" name="pin_code" id="pin_code"
-                    class="form-control form-control-lg text-center fs-4 tracking-widest" placeholder="•••••"
-                    maxlength="5" pattern="\d{5}" inputmode="numeric" autocomplete="off" required>
-                <div class="form-text mt-2">Код выдан вашим учителем.</div>
+            {% if error %}
+            <div class="alert alert-danger py-2">{{ error }}</div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Класс</label>
+                    <select name="school_class" class="form-select" required>
+                        <option value="" disabled selected>Выберите класс</option>
+                        {% for c in classes %}
+                        <option value="{{ c.id }}">{{ c.display_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">PIN-код</label>
+                    <input type="password" name="pin_code" class="form-control text-center"
+                           maxlength="5" pattern="\d{5}" inputmode="numeric" placeholder="•••••" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100 py-2">Войти</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="/" class="small text-muted">← На главную</a>
             </div>
-
-            <button type="submit" class="btn btn-success w-100 py-3 fw-bold fs-5">
-                Войти
-            </button>
-        </form>
-
-        <hr class="my-4">
-        <div class="text-center">
-            <a href="{% url 'login' %}" class="text-decoration-none small text-secondary">
-                Я учитель / администратор
-            </a>
         </div>
     </div>
 </div>

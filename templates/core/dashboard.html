@@ -1,62 +1,85 @@
 {% extends "base.html" %}
-
 {% block title %}Обзор{% endblock %}
+{% block header_title %}Обзор{% endblock %}
 
 {% block staff_content %}
 <div class="container-fluid py-4">
-    <h2 class="mb-4">Обзор</h2>
-
-    <div class="row g-3">
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-muted">Учеников</h5>
-                    <p class="display-6 mb-0">{{ total_students }}</p>
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card d-flex align-items-center gap-3">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">🎓</div>
+                <div>
+                    <div class="text-muted small fw-bold text-uppercase">Всего учеников</div>
+                    <div class="fs-2 fw-bold">{{ total_students }}</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-muted">Пройдено тестов</h5>
-                    <p class="display-6 mb-0">{{ total_attempts }}</p>
+        <div class="col-md-4">
+            <div class="stat-card d-flex align-items-center gap-3">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#10b981,#059669);">✅</div>
+                <div>
+                    <div class="text-muted small fw-bold text-uppercase">Пройдено тестов</div>
+                    <div class="fs-2 fw-bold">{{ total_attempts }}</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-muted">Средний %</h5>
-                    <p class="display-6 mb-0">{{ avg_percentage }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-muted">Активных назначений</h5>
-                    <p class="display-6 mb-0">{{ active_runs }}</p>
+        <div class="col-md-4">
+            <div class="stat-card d-flex align-items-center gap-3">
+                <div class="stat-icon" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">⭐</div>
+                <div>
+                    <div class="text-muted small fw-bold text-uppercase">Средний %</div>
+                    <div class="fs-2 fw-bold">{{ avg_percentage }}</div>
                 </div>
             </div>
         </div>
     </div>
 
+    
+    <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">Активность обучения</h5><a href="{% url 'export_report' %}" class="btn btn-sm btn-outline-secondary">Экспорт отчёта</a></div>
+            <canvas id="activityChart" height="100"></canvas>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    new Chart(document.getElementById("activityChart"), {
+        type: "line",
+        data: {
+            labels: {{ chart_labels|safe }},
+            datasets: [{
+                label: "Пройдено тестов",
+                data: {{ chart_data|safe }},
+                borderColor: "#7c3aed",
+                backgroundColor: "rgba(124,58,237,0.1)",
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+    </script>
+
     {% if recent %}
-    <h4 class="mt-5 mb-3">Последние прохождения</h4>
-    <div class="card">
-        <div class="table-responsive">
-            <table class="table table-sm mb-0">
-                <thead class="table-light"><tr><th>Ученик</th><th>Тест</th><th>%</th></tr></thead>
-                <tbody>
-                    {% for a in recent %}
-                    <tr>
-                        <td>{{ a.student.full_name }}</td>
-                        <td>{{ a.exam_run.test.title }}</td>
-                        <td>{{ a.percentage|floatformat:0 }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="card border-0 shadow-sm" style="border-radius:20px;">
+        <div class="card-body p-4">
+            <h5 class="mb-3">Последние прохождения</h5>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr><th>Ученик</th><th>Тест</th><th>%</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for a in recent %}
+                        <tr>
+                            <td>{{ a.student.full_name }}</td>
+                            <td>{{ a.exam_run.test.title }}</td>
+                            <td>{{ a.percentage|floatformat:0 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     {% endif %}
